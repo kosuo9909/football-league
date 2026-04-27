@@ -1,6 +1,6 @@
 namespace FootballLeague.Application.Contracts.Rankings;
 
-public class RankingRowDto
+public class TeamRankingDto
 {
     public int Position { get; set; }
 

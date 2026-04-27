@@ -4,5 +4,5 @@ namespace FootballLeague.Application.Abstractions;
 
 public interface IRankingService
 {
-    Task<IReadOnlyCollection<RankingRowDto>> GetRankingsAsync(CancellationToken cancellationToken = default);
+    Task<IReadOnlyCollection<TeamRankingDto>> GetRankingsAsync(CancellationToken cancellationToken = default);
 }
