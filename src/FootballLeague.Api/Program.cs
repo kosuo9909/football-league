@@ -30,6 +30,8 @@ builder.Services.AddScoped<IRankingCalculator, StandardFootballRankingCalculator
 
 var app = builder.Build();
 
+app.UseMiddleware<FootballLeague.Api.Infrastructure.GlobalExceptionHandlingMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
