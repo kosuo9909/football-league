@@ -55,25 +55,31 @@ public class MatchService : IMatchService
     {
         // Fetch teams upfront so we have their names for the returned DTO,
         // and so we fail early with a clear message if either team does not exist.
-        var homeTeam = await _dbContext.Teams.FirstOrDefaultAsync(team => team.Id == request.HomeTeamId, cancellationToken);
+        var homeTeamId = request.HomeTeamId!.Value;
+        var awayTeamId = request.AwayTeamId!.Value;
+        var homeScore = request.HomeScore!.Value;
+        var awayScore = request.AwayScore!.Value;
+        var playedOnUtc = request.PlayedOnUtc!.Value;
+
+        var homeTeam = await _dbContext.Teams.FirstOrDefaultAsync(team => team.Id == homeTeamId, cancellationToken);
         if (homeTeam is null)
         {
-            throw new InvalidOperationException($"Home team with id {request.HomeTeamId} was not found.");
+            throw new InvalidOperationException($"Home team with id {homeTeamId} was not found.");
         }
 
-        var awayTeam = await _dbContext.Teams.FirstOrDefaultAsync(team => team.Id == request.AwayTeamId, cancellationToken);
+        var awayTeam = await _dbContext.Teams.FirstOrDefaultAsync(team => team.Id == awayTeamId, cancellationToken);
         if (awayTeam is null)
         {
-            throw new InvalidOperationException($"Away team with id {request.AwayTeamId} was not found.");
+            throw new InvalidOperationException($"Away team with id {awayTeamId} was not found.");
         }
 
         var match = new Match
         {
-            HomeTeamId = request.HomeTeamId,
-            AwayTeamId = request.AwayTeamId,
-            HomeScore = request.HomeScore,
-            AwayScore = request.AwayScore,
-            PlayedOnUtc = request.PlayedOnUtc
+            HomeTeamId = homeTeamId,
+            AwayTeamId = awayTeamId,
+            HomeScore = homeScore,
+            AwayScore = awayScore,
+            PlayedOnUtc = playedOnUtc
         };
 
         _dbContext.Matches.Add(match);
@@ -96,11 +102,17 @@ public class MatchService : IMatchService
             return null;
         }
 
-        match.HomeTeamId = request.HomeTeamId;
-        match.AwayTeamId = request.AwayTeamId;
-        match.HomeScore = request.HomeScore;
-        match.AwayScore = request.AwayScore;
-        match.PlayedOnUtc = request.PlayedOnUtc;
+    var homeTeamId = request.HomeTeamId!.Value;
+    var awayTeamId = request.AwayTeamId!.Value;
+    var homeScore = request.HomeScore!.Value;
+    var awayScore = request.AwayScore!.Value;
+    var playedOnUtc = request.PlayedOnUtc!.Value;
+
+    match.HomeTeamId = homeTeamId;
+    match.AwayTeamId = awayTeamId;
+    match.HomeScore = homeScore;
+    match.AwayScore = awayScore;
+    match.PlayedOnUtc = playedOnUtc;
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
