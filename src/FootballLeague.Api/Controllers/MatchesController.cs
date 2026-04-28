@@ -40,7 +40,7 @@ public class MatchesController : ControllerBase
     /// <response code="404">If the match does not exist.</response>
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<MatchDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
         var match = await _matchService.GetByIdAsync(id, cancellationToken);
@@ -98,7 +98,7 @@ public class MatchesController : ControllerBase
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<MatchDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, UpdateMatchRequest request, CancellationToken cancellationToken)
     {
         var match = await _matchService.UpdateAsync(id, request, cancellationToken);
@@ -121,7 +121,7 @@ public class MatchesController : ControllerBase
     /// <response code="404">If the match does not exist.</response>
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<MatchDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var deleted = await _matchService.DeleteAsync(id, cancellationToken);

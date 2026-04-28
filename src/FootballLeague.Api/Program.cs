@@ -1,3 +1,4 @@
+using FootballLeague.Api.Infrastructure;
 using FootballLeague.Application.Abstractions;
 using FootballLeague.Application.Services;
 using FootballLeague.Infrastructure.Persistence;
@@ -34,6 +35,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<FootballLeagueDbContext>();
+    DatabaseSeeder.SeedIfEmpty(dbContext);
 }
 
 app.UseHttpsRedirection();

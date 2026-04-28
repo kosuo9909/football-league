@@ -40,7 +40,7 @@ public class TeamsController : ControllerBase
     /// <response code="404">If the team does not exist.</response>
     [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<TeamDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
         var team = await _teamService.GetByIdAsync(id, cancellationToken);
@@ -83,7 +83,7 @@ public class TeamsController : ControllerBase
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<TeamDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, UpdateTeamRequest request, CancellationToken cancellationToken)
     {
         var team = await _teamService.UpdateAsync(id, request, cancellationToken);
@@ -106,7 +106,7 @@ public class TeamsController : ControllerBase
     /// <response code="404">If the team does not exist.</response>
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<TeamDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
         var deleted = await _teamService.DeleteAsync(id, cancellationToken);
