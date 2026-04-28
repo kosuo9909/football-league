@@ -76,13 +76,22 @@ public class MatchesController : ControllerBase
     /// <returns>The created match.</returns>
     /// <response code="201">Returns the newly recorded match.</response>
     /// <response code="400">If the request body is invalid.</response>
+    /// <response code="404">If either team does not exist.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<MatchDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Create(CreateMatchRequest request, CancellationToken cancellationToken)
     {
-        var match = await _matchService.CreateAsync(request, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id = match.Id }, ApiResponse<MatchDto>.Succeeded(match));
+        try
+        {
+            var match = await _matchService.CreateAsync(request, cancellationToken);
+            return CreatedAtAction(nameof(GetById), new { id = match.Id }, ApiResponse<MatchDto>.Succeeded(match));
+        }
+        catch (InvalidOperationException ex)
+        {
+            return NotFound(ApiResponse<MatchDto>.Failed(ex.Message));
+        }
     }
 
     /// <summary>
@@ -97,7 +106,7 @@ public class MatchesController : ControllerBase
     /// <response code="404">If the match does not exist.</response>
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<MatchDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, UpdateMatchRequest request, CancellationToken cancellationToken)
     {

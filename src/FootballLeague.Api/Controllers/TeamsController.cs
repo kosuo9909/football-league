@@ -63,7 +63,7 @@ public class TeamsController : ControllerBase
     /// <response code="400">If the request body is invalid.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(CreateTeamRequest request, CancellationToken cancellationToken)
     {
         var team = await _teamService.CreateAsync(request, cancellationToken);
@@ -82,7 +82,7 @@ public class TeamsController : ControllerBase
     /// <response code="404">If the team does not exist.</response>
     [HttpPut("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ApiResponse<TeamDto>), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, UpdateTeamRequest request, CancellationToken cancellationToken)
     {
